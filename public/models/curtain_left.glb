@@ -1,0 +1,42 @@
+import bpy
+import math
+
+# =========================
+# TEMİZ SAHNE
+# =========================
+bpy.ops.object.select_all(action='SELECT')
+bpy.ops.object.delete(use_global=False)
+
+# =========================
+# PERDE PARAMETRELERİ
+# =========================
+WIDTH = 4
+HEIGHT = 12
+FOLDS = 22
+THICKNESS = 0.04
+
+# =========================
+# PERDE OLUŞTUR
+# =========================
+bpy.ops.mesh.primitive_plane_add(size=1)
+curtain = bpy.context.object
+curtain.name = "Curtain"
+
+# Ölçek
+curtain.scale = (WIDTH / 2, HEIGHT / 2, 1)
+bpy.ops.object.transform_apply(scale=True)
+
+# =========================
+# SUBDIVISION
+# =========================
+sub = curtain.modifiers.new("Subsurf", 'SUBSURF')
+sub.levels = 3
+sub.render_levels = 3
+
+# =========================
+# DİKEY PİLELER (WAVE)
+# =========================
+wave = curtain.modifiers.new("Folds", 'WAVE')
+wave.direction = 'X'
+wave.width = WIDTH / FOLDS
+wave.height = 0.35
